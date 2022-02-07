@@ -1,11 +1,20 @@
 {
     "name": "art-timecode-reader",
     "version": "0.0.1",
+    "author": "Marece Williams",
+    "description": "ArtNet Timecode Reader",
+    "homepage": "./",
+    "main": "public/main.js",
     "private": true,
     "dependencies": {
+        "@emotion/react": "^11.7.1",
+        "@emotion/styled": "^11.6.0",
+        "@mui/icons-material": "^5.3.1",
+        "@mui/material": "^5.4.0",
         "@testing-library/jest-dom": "^5.16.2",
         "@testing-library/react": "^12.1.2",
         "@testing-library/user-event": "^13.5.0",
+        "electron-updater": "^4.6.1",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
         "react-scripts": "5.0.0",
@@ -15,7 +24,18 @@
         "start": "react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test",
-        "eject": "react-scripts eject"
+        "eject": "react-scripts eject",
+        "electron": "electron .",
+        "dev": "nf start",
+        "install": "electron-rebuild",
+        "rebuild": "electron-rebuild -f",
+        "package": "electron-builder build -c.extraMetadata.main=build/main.js --publish never",
+        "deploy": "electron-builder build -c.extraMetadata.main=build/main.js --publish always",
+        "backup": "git add . && git commit -m %NPM_PACKAGE_VERSION% && git push origin main ",
+        "upload": "yarn build && yarn backup && yarn deploy",
+        "mac": "yarn && yarn build && node copyPlist.js && yarn deploy",
+        "try": "yarn build && yarn package ",
+        "refresh": "yarn upgrade --latest && yarn rebuild"
     },
     "eslintConfig": {
         "extends": [
@@ -34,5 +54,41 @@
             "last 1 firefox version",
             "last 1 safari version"
         ]
+    },
+    "build": {
+        "productName": "ArtTimecode Reader",
+        "appId": "com.wbm.arttimecodereader",
+        "copyright": "WBM Tek",
+        "extends": null,
+        "npmRebuild": false,
+        "afterSign": "./notarize.js",
+        "files": [
+            "build/**/*",
+            "electron/*"
+        ],
+        "mac": {
+            "icon": "public/icon.icns",
+            "hardenedRuntime": true,
+            "gatekeeperAssess": false,
+            "entitlements": "build/entitlements.mac.plist",
+            "entitlementsInherit": "build/entitlements.mac.plist"
+        },
+        "dmg": {
+            "sign": false
+        },
+        "win": {
+            "icon": "public/icon.ico"
+        }
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/wbmmusic/art-timecode-reader.git"
+    },
+    "devDependencies": {
+        "electron": "^17.0.0",
+        "electron-builder": "^22.14.5",
+        "electron-notarize": "^1.1.1",
+        "electron-rebuild": "^3.2.7",
+        "foreman": "^3.0.1"
     }
 }
