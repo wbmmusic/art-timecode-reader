@@ -70,3 +70,10 @@
     overflow: hidden;
     user-select: none;
 }
+
+.from {
+    color: limegreen;
+    position: absolute;
+    bottom: 2px;
+    left: 2px;
+}

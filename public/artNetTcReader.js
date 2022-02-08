@@ -95,6 +95,7 @@ const checkValidTime = () => {
 
 process.on('message', (msg) => {
     //console.log('Child got a message');
+
     switch (msg.cmd) {
 
         case 'consoleAddress':
@@ -141,10 +142,11 @@ process.on('message', (msg) => {
     }
 })
 
-server.on('message', (msg) => {
+server.on('message', (msg, rInfo) => {
     if (msg[9] !== 0x97) return
+        //console.log(rInfo);
         //console.log(msg.toString());
-    const clock = { time: `${addZero(msg[17])}:${addZero(msg[16])}:${addZero(msg[15])}:${addZero(msg[14])}`, rate: makeRate(msg[18]) }
+    const clock = { time: `${addZero(msg[17])}:${addZero(msg[16])}:${addZero(msg[15])}:${addZero(msg[14])}`, rate: makeRate(msg[18]), from: rInfo.address }
     process.send({ cmd: 'time', clock })
 })
 
