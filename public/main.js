@@ -23,6 +23,8 @@ else {
 }
 // END SECOND INSTANCE
 
+const aspect = 4.5
+const minHeight = 100
 
 const artNet = fork(join(__dirname, 'artNetTcReader.js'), { stdio: ['pipe', 'pipe', 'pipe', 'ipc'] })
 artNet.stdout.pipe(process.stdout)
@@ -31,8 +33,10 @@ artNet.stderr.pipe(process.stdout)
 const createWindow = () => {
     // Create the browser window.
     win = new BrowserWindow({
-        height: 100,
-        minHeight: 100,
+        height: minHeight,
+        width: minHeight * aspect,
+        minHeight: minHeight,
+        minWidth: minHeight * aspect,
         autoHideMenuBar: true,
         show: false,
         title: 'ArtTimecode Gen v' + app.getVersion(),
@@ -50,7 +54,7 @@ const createWindow = () => {
     });
 
     win.loadURL(startUrl);
-    win.setAspectRatio(4.5)
+    win.setAspectRatio(aspect)
         // Emitted when the window is closed.
     win.on('closed', () => app.quit())
     win.on('ready-to-show', () => win.show())
