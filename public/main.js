@@ -36,14 +36,12 @@ const createWindow = () => {
         autoHideMenuBar: true,
         show: false,
         title: 'ArtTimecode Gen v' + app.getVersion(),
-        transparent: true,
         frame: false,
         hasShadow: false,
         webPreferences: {
             preload: join(__dirname, 'preload.js')
         }
     })
-
 
     const startUrl = process.env.ELECTRON_START_URL || URL.format({
         pathname: join(__dirname, '/../build/index.html'),
