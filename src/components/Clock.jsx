@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 export default function Clock() {
-  const [time, setTime] = useState({ time: "01:23:45:57", rate: 30, from: "" });
+  const [time, setTime] = useState({ time: "00:00:00:00", rate: 30, from: "" });
 
   useEffect(() => {
     window.electron.receive("time", theTime => setTime(theTime));

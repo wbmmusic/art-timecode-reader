@@ -1,6 +1,6 @@
 {
     "name": "art-timecode-reader",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "author": "Marece Williams",
     "description": "ArtNet Timecode Reader",
     "homepage": "./",
