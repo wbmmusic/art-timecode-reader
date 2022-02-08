@@ -20,13 +20,23 @@
     display: flex;
 }
 
-.minimize {}
+.minimize {
+    width: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
 .minimize:hover {
     background: darkgrey;
 }
 
-.close {}
+.close {
+    width: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
 .close:hover {
     background: red;
