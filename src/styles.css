@@ -1,0 +1,62 @@
+.topBar {
+    width: 100%;
+    display: flex;
+    background: grey;
+}
+
+.topBarDrag {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    -webkit-user-select: none;
+    -webkit-app-region: drag;
+    padding-left: 4px;
+    font-size: 14px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.topBarHover {
+    display: flex;
+}
+
+.minimize {}
+
+.minimize:hover {
+    background: darkgrey;
+}
+
+.close {}
+
+.close:hover {
+    background: red;
+}
+
+.clockBox {
+    background: black;
+    color: limegreen;
+    font-weight: bold;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.clockDigits {
+    text-align: center;
+    font-size: 14.5vw;
+}
+
+.frameRate {
+    text-align: center;
+    font-size: 3vw;
+    transform: translateY(-19px);
+}
+
+.container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    user-select: none;
+}

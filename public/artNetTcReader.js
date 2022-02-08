@@ -1,16 +1,10 @@
 const dgram = require('dgram');
 const { Buffer } = require('buffer');
-let sender = dgram.createSocket('udp4');
+let server = dgram.createSocket('udp4');
+server.bind(6454)
 
 console.log('TOP OF CHILD');
 
-// Timer Stuff
-const delays = {
-    24: '41666666n',
-    25: '40000000n',
-    29.97: '33333333n',
-    30: '33333333n'
-}
 
 // Clock Variables
 let hours = 0;
@@ -38,19 +32,19 @@ const header = Buffer.concat([id, opCode, protVer, filler])
 
 let outBuffer = Buffer.alloc(19)
 
-const makeTypeByte = () => {
-    switch (framerate) {
-        case 24:
-            return 0
+const makeRate = (type) => {
+    switch (type) {
+        case 0:
+            return 24
 
-        case 25:
-            return 1
+        case 1:
+            return 25
 
-        case 29.97:
-            return 2
+        case 2:
+            return 29.97
 
-        case 30:
-            return 3
+        case 3:
+            return 30
 
         default:
             throw new Error('Invalid rate')
@@ -64,11 +58,6 @@ const makeTimeBytes = () => {
 const addZero = (num) => {
     if (num < 10) return '0' + num
     return num
-}
-
-const sendClockToFrontEnd = () => {
-    const clock = { time: `${addZero(hours)}:${addZero(mins)}:${addZero(secs)}:${addZero(frames)}`, rate: framerate }
-    process.send({ cmd: 'time', clock })
 }
 
 const checkValidTime = () => {
@@ -103,55 +92,6 @@ const checkValidTime = () => {
     }
 }
 
-const makeOutBuffer = () => {
-    //console.log('Make Output Buffer');
-    checkValidTime()
-    outBuffer = Buffer.concat([header, makeTimeBytes()])
-}
-
-const sendMsg = async() => {
-    return new Promise(async(resolve, reject) => {
-        sender.send(outBuffer, 6454, consoleAddress, () => resolve())
-    })
-}
-
-const sendFrame = async() => {
-    //console.log(outBuffer);
-    if (output) await sendMsg()
-    sendClockToFrontEnd()
-    frames++
-    makeOutBuffer()
-}
-
-const stopClock = () => {
-    running = false
-}
-
-const startClock = () => {
-    stopClock()
-    running = true
-}
-
-const setFrameRate = (rate) => {
-    framerate = rate
-    if (running) startClock()
-    sendClockToFrontEnd()
-    return framerate
-}
-
-const handleTime = (time) => {
-    //console.log(time);
-    hours = time[0]
-    mins = time[1]
-    secs = time[2]
-    frames = time[3]
-
-    // sendClockToFrontEnd happens b4 makeOutBuffer so user sees what they typed
-    // DROP FRAME If in 29.97 they type 00:01:00:00 they will see that but outBuffer will be 00:01:00:02
-    sendClockToFrontEnd()
-    makeOutBuffer()
-    console.log(hours, mins, secs, frames);
-}
 
 process.on('message', (msg) => {
     //console.log('Child got a message');
@@ -201,4 +141,13 @@ process.on('message', (msg) => {
     }
 })
 
-makeOutBuffer()
+server.on('message', (msg) => {
+    if (msg[9] !== 0x97) return
+        //console.log(msg.toString());
+    const clock = { time: `${addZero(msg[17])}:${addZero(msg[16])}:${addZero(msg[15])}:${addZero(msg[14])}`, rate: makeRate(msg[18]) }
+    process.send({ cmd: 'time', clock })
+})
+
+server.on('listening', () => {
+    console.log('Server Listening');
+})
