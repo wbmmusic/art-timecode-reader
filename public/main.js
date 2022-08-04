@@ -40,7 +40,8 @@ const createWindow = () => {
         frame: false,
         hasShadow: false,
         webPreferences: {
-            preload: join(__dirname, 'preload.js')
+            preload: join(__dirname, 'preload.js'),
+            sandbox: false
         }
     })
 
