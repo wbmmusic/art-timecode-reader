@@ -1,70 +1,30 @@
-# Getting Started with Create React App
+# Art Timecode Reader
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+React + Electron desktop application for receiving and displaying ArtNet timecode signals from professional lighting and video systems. This companion tool to art-timecode-gen monitors and displays timecode in live events and broadcast production environments.
 
-## Available Scripts
+## Key Features
 
-In the project directory, you can run:
+- **ArtNet Protocol Reception**: Receives ArtNet timecode packets (OpCode 0x9700) on port 6454 (ArtNet standard protocol)
+- **Multiple Frame Rate Support**: Displays 24, 25, 29.97, and 30 fps timecode with automatic frame rate detection
+- **Real-time Display**: Visual timecode display showing hours:minutes:seconds:frames format from network sources
+- **Source Identification**: Shows IP address of timecode source for network troubleshooting and monitoring
+- **Professional Interface**: Material-UI with lighting industry-standard display and controls for production use
+- **Cross-Platform**: macOS and Windows builds with code signing and notarization for professional deployment
+- **Auto-Update**: Electron auto-updater for maintaining current versions in production environments
+- **Network Monitoring**: Continuously listens for incoming ArtNet timecode from lighting consoles and media servers
+- **Production Ready**: Designed for reliable operation in live event and broadcast production environments
 
-### `npm start`
+## Architecture
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Electron application with React frontend and Node.js UDP server designed for receiving and displaying ArtNet timecode packets in professional production environments.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Professional Usage
 
-### `npm test`
+Used as a companion to art-timecode-gen in live events, broadcast production, and theatrical productions to monitor and display ArtNet timecode signals from lighting consoles, media servers, and other professional equipment.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Dependencies
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- React
+- Electron
+- Material-UI
+- electron-updater
