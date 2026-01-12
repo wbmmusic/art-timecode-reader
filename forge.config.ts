@@ -15,6 +15,9 @@ const config: ForgeConfig = {
     appCopyright: 'WBM Tek',
     icon: './src/assets/icon',
     asar: true,
+    extraResource: [
+      './src/assets/icon.ico'
+    ],
     osxSign: {
       identity: 'Developer ID Application: WBM Tek'
     },

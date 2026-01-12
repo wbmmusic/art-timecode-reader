@@ -13,6 +13,10 @@ export default defineConfig({
         {
           src: 'package.json',
           dest: '.vite/build'
+        },
+        {
+          src: 'src/assets/icon.ico',
+          dest: '.vite/build'
         }
       ]
     })

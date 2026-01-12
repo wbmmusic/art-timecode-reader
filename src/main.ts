@@ -42,6 +42,7 @@ const createWindow = () => {
         title: 'ArtTimecode Gen v' + app.getVersion(),
         frame: false,
         hasShadow: false,
+        icon: join(__dirname, 'icon.ico'),
         webPreferences: {
             preload: join(__dirname, 'preload.js'),
             sandbox: false
