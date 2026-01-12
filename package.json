@@ -25,6 +25,9 @@
     "backup": "git add . && git commit -m %NPM_PACKAGE_VERSION% && git push origin main",
     "refresh": "pnpm upgrade --latest"
   },
+  "config": {
+    "forge": "./forge.config.ts"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/wbmmusic/art-timecode-reader.git"
