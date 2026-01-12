@@ -1,0 +1,39 @@
+{
+    "compilerOptions": {
+        "target": "es2020",
+        "module": "commonjs",
+        "lib": [
+            "es2020"
+        ],
+        "outDir": "./build",
+        "strict": false,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "resolveJsonModule": true,
+        "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true,
+        "typeRoots": [
+            "./node_modules/@types"
+        ],
+        "types": [
+            "node"
+        ],
+        "baseUrl": ".",
+        "paths": {
+            "*": [
+                "node_modules/@types/*"
+            ]
+        }
+    },
+    "include": [
+        "src/main.ts",
+        "src/preload.ts",
+        "public/artNetTcReader.js"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist",
+        "build"
+    ]
+}

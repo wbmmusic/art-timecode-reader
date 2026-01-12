@@ -1,17 +1,22 @@
 import React, { useEffect, useState } from "react";
+import type { TimeData } from "../types";
 
 export default function Clock() {
-  const [time, setTime] = useState({ time: "00:00:00:00", rate: 30, from: "" });
+  const [time, setTime] = useState<TimeData>({
+    time: "00:00:00:00",
+    rate: 30,
+    from: "",
+  });
 
   useEffect(() => {
-    window.electron.receive("time", theTime => setTime(theTime));
+    window.electron.receive("time", (theTime: TimeData) => setTime(theTime));
 
     return () => {
       window.electron.removeListener("time");
     };
   }, []);
 
-  const makeTime = () => {
+  const makeTime = (): string => {
     if (time.rate !== 29.97) return time.time;
     else {
       const tAr = time.time.split(":");

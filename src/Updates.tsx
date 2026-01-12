@@ -4,15 +4,33 @@ import Snackbar from "@mui/material/Snackbar";
 import CloseIcon from "@mui/icons-material/Close";
 import Button from "@mui/material/Button";
 
-export default function Updates() {
-  const defaultDownloadSnack = { show: false, progress: 0 };
-  const defaultInstallSnack = { show: false, version: "x.x.x" };
-  const [downloadSnack, setDownloadSnack] = useState(defaultDownloadSnack);
-  const [installSnack, setInstallSnack] = useState(defaultInstallSnack);
+interface DownloadSnackState {
+  show: boolean;
+  progress: number;
+}
 
-  const handleClose = (event, reason) => {
+interface InstallSnackState {
+  show: boolean;
+  version: string;
+}
+
+export default function Updates() {
+  const defaultDownloadSnack: DownloadSnackState = { show: false, progress: 0 };
+  const defaultInstallSnack: InstallSnackState = {
+    show: false,
+    version: "x.x.x",
+  };
+  const [downloadSnack, setDownloadSnack] =
+    useState<DownloadSnackState>(defaultDownloadSnack);
+  const [installSnack, setInstallSnack] =
+    useState<InstallSnackState>(defaultInstallSnack);
+
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
     if (reason === "clickaway") return;
-    setDownloadSnack({ show: false });
+    setDownloadSnack({ ...defaultDownloadSnack, show: false });
   };
 
   const install = () => window.electron.send("installUpdate");
@@ -35,7 +53,7 @@ export default function Updates() {
 
   const installAction = (
     <Fragment>
-      <Button size="sm" color="error" onClick={() => install()}>
+      <Button size="small" color="error" onClick={() => install()}>
         Relaunch App
       </Button>
       <IconButton
@@ -51,12 +69,12 @@ export default function Updates() {
 
   useEffect(() => {
     window.electron.send("reactIsReady");
-    window.electron.receive("updater", (a, b) => {
+    window.electron.receive("updater", (a: string, b?: any) => {
       if (a === "checking-for-update") console.log("Checking For Update");
       else if (a === "update-not-available")
-        console.log("Up to date: v" + b.version);
+        console.log("Up to date: v" + b?.version);
       else if (a === "update-available")
-        setDownloadSnack(old => ({ show: true, progress: 0 }));
+        setDownloadSnack(old => ({ ...old, show: true, progress: 0 }));
       else if (a === "download-progress") {
         console.log("Downloading", Math.round(b.percent) + "%");
         setDownloadSnack(old => ({ ...old, progress: Math.round(b.percent) }));

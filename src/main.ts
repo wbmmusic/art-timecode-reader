@@ -1,10 +1,13 @@
-const { app, BrowserWindow, ipcMain, protocol } = require('electron')
-const { join, normalize } = require('path')
-const { fork } = require('child_process')
-const URL = require('url')
-const { autoUpdater } = require('electron-updater');
+import { app, BrowserWindow, ipcMain, protocol } from 'electron';
+import { join, normalize } from 'node:path';
+import { fork, ChildProcess } from 'node:child_process';
+import { autoUpdater } from 'electron-updater';
 
-let win
+// Declare Vite environment variables
+declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string | undefined;
+declare const MAIN_WINDOW_VITE_NAME: string;
+
+let win: BrowserWindow | null = null;
 
 // SECOND INSTANCE
 const gotTheLock = app.requestSingleInstanceLock()
@@ -24,8 +27,8 @@ const aspect = 4.5
 const minHeight = 100
 
 const artNet = fork(join(__dirname, 'artNetTcReader.js'), { stdio: ['pipe', 'pipe', 'pipe', 'ipc'] })
-artNet.stdout.pipe(process.stdout)
-artNet.stderr.pipe(process.stdout)
+artNet.stdout?.pipe(process.stdout)
+artNet.stderr?.pipe(process.stdout)
 
 const createWindow = () => {
     // Create the browser window.
@@ -51,9 +54,9 @@ const createWindow = () => {
 
     win.loadURL(startUrl);
     win.setAspectRatio(aspect)
-        // Emitted when the window is closed.
+    // Emitted when the window is closed.
     win.on('closed', () => app.quit())
-    win.on('ready-to-show', () => win.show())
+    win.on('ready-to-show', () => win?.show())
 }
 
 app.on('ready', () => {
@@ -63,13 +66,13 @@ app.on('ready', () => {
         callback({ path: normalize(`${__dirname}/${url}`) })
     })
 
-    artNet.on('message', (msg) => {
+    artNet.on('message', (msg: any) => {
         switch (msg.cmd) {
             case 'time':
                 try {
-                    win.webContents.send('time', msg.clock)
+                    win?.webContents.send('time', msg.clock)
                 } catch (error) {
-
+                    console.error('Error sending time:', error);
                 }
                 break;
 
@@ -77,17 +80,17 @@ app.on('ready', () => {
                 break;
         }
     });
-    artNet.on('error', (err) => { console.log(err); })
-    artNet.on('close', (err, msg) => { console.log('CLOSED', err, msg); })
+    artNet.on('error', (err: Error) => { console.log(err); })
+    artNet.on('close', (code: number | null) => { console.log('CLOSED', code); })
 
     ipcMain.on('reactIsReady', () => {
         if (app.isPackaged) {
-            autoUpdater.on('error', (err) => win.webContents.send('updater', err))
-            autoUpdater.on('checking-for-update', () => win.webContents.send('updater', "checking-for-update"))
-            autoUpdater.on('update-available', (info) => win.webContents.send('updater', 'update-available', info))
-            autoUpdater.on('update-not-available', (info) => win.webContents.send('updater', 'update-not-available', info))
-            autoUpdater.on('download-progress', (info) => win.webContents.send('updater', 'download-progress', info))
-            autoUpdater.on('update-downloaded', (info) => win.webContents.send('updater', 'update-downloaded', info))
+            autoUpdater.on('error', (err: Error) => win?.webContents.send('updater', err))
+            autoUpdater.on('checking-for-update', () => win?.webContents.send('updater', "checking-for-update"))
+            autoUpdater.on('update-available', (info: any) => win?.webContents.send('updater', 'update-available', info))
+            autoUpdater.on('update-not-available', (info: any) => win?.webContents.send('updater', 'update-not-available', info))
+            autoUpdater.on('download-progress', (info: any) => win?.webContents.send('updater', 'download-progress', info))
+            autoUpdater.on('update-downloaded', (info: any) => win?.webContents.send('updater', 'update-downloaded', info))
             ipcMain.on('installUpdate', () => autoUpdater.quitAndInstall())
 
             setTimeout(() => autoUpdater.checkForUpdates(), 3000);
@@ -96,7 +99,7 @@ app.on('ready', () => {
     })
 
     ipcMain.on('close', () => app.quit())
-    ipcMain.on('min', () => win.minimize())
+    ipcMain.on('min', () => win?.minimize())
 
     createWindow()
 
@@ -104,7 +107,7 @@ app.on('ready', () => {
 })
 
 app.on('will-quit', () => artNet.kill('SIGKILL'))
-    // Quit when all windows are closed.
+// Quit when all windows are closed.
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit()
 })

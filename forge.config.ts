@@ -1,12 +1,13 @@
-const { MakerSquirrel } = require('@electron-forge/maker-squirrel');
-const { MakerZIP } = require('@electron-forge/maker-zip');
-const { MakerDeb } = require('@electron-forge/maker-deb');
-const { MakerRpm } = require('@electron-forge/maker-rpm');
-const { MakerDMG } = require('@electron-forge/maker-dmg');
-const { PublisherGithub } = require('@electron-forge/publisher-github');
-const { VitePlugin } = require('@electron-forge/plugin-vite');
+import type { ForgeConfig } from '@electron-forge/shared-types';
+import { MakerSquirrel } from '@electron-forge/maker-squirrel';
+import { MakerZIP } from '@electron-forge/maker-zip';
+import { MakerDeb } from '@electron-forge/maker-deb';
+import { MakerRpm } from '@electron-forge/maker-rpm';
+import { MakerDMG } from '@electron-forge/maker-dmg';
+import { PublisherGithub } from '@electron-forge/publisher-github';
+import { VitePlugin } from '@electron-forge/plugin-vite';
 
-module.exports = {
+const config: ForgeConfig = {
   packagerConfig: {
     name: 'ArtTimecode Reader',
     executableName: 'art-timecode-reader',
@@ -70,18 +71,18 @@ module.exports = {
     new VitePlugin({
       build: [
         {
-          entry: 'src/main.js',
-          config: 'vite.main.config.js',
+          entry: 'src/main.ts',
+          config: 'vite.main.config.ts',
         },
         {
-          entry: 'src/preload.js',
-          config: 'vite.preload.config.js',
+          entry: 'src/preload.ts',
+          config: 'vite.preload.config.ts',
         },
       ],
       renderer: [
         {
           name: 'main_window',
-          config: 'vite.renderer.config.js',
+          config: 'vite.renderer.config.ts',
         },
       ],
     }),
@@ -97,3 +98,5 @@ module.exports = {
     })
   ]
 };
+
+export default config;
