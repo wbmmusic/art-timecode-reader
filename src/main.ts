@@ -2,6 +2,7 @@ import { app, BrowserWindow, ipcMain, protocol } from 'electron';
 import { join, normalize } from 'node:path';
 import { fork, ChildProcess } from 'node:child_process';
 import { autoUpdater } from 'electron-updater';
+import windowStateKeeper from 'electron-window-state';
 
 // Declare Vite environment variables
 declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string | undefined;
@@ -31,10 +32,18 @@ artNet.stdout?.pipe(process.stdout)
 artNet.stderr?.pipe(process.stdout)
 
 const createWindow = () => {
+    // Load the previous window state with fallback to defaults
+    const mainWindowState = windowStateKeeper({
+        defaultWidth: minHeight * aspect,
+        defaultHeight: minHeight,
+    });
+
     // Create the browser window.
     win = new BrowserWindow({
-        height: minHeight,
-        width: minHeight * aspect,
+        x: mainWindowState.x,
+        y: mainWindowState.y,
+        height: mainWindowState.height,
+        width: mainWindowState.width,
         minHeight: minHeight,
         minWidth: minHeight * aspect,
         autoHideMenuBar: true,
@@ -48,6 +57,9 @@ const createWindow = () => {
             sandbox: false
         }
     })
+
+    // Let the window state manager track the window's size and position
+    mainWindowState.manage(win);
 
     // In development, MAIN_WINDOW_VITE_DEV_SERVER_URL is provided by @electron-forge/plugin-vite
     // In production, MAIN_WINDOW_VITE_NAME is provided
